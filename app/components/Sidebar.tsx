@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { CATEGORY_META, getFeaturedGuides } from "@/app/lib/guides";
+import { getFeaturedGuides } from "@/app/lib/guides";
 import CoverArt from "./CoverArt";
 
 export default function Sidebar() {
@@ -47,7 +47,7 @@ export default function Sidebar() {
           {featured.map((g) => (
             <li key={g.slug}>
               <Link
-                href={`/blog/${g.slug}`}
+                href={`/${g.slug}`}
                 className="group flex items-center gap-3"
               >
                 <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-lg border border-line">
@@ -57,37 +57,13 @@ export default function Sidebar() {
                     className="h-full w-full"
                   />
                 </div>
-                <div>
-                  <div className="text-[11px] uppercase tracking-wide text-accent">
-                    {g.category}
-                  </div>
-                  <div className="text-sm font-medium leading-snug text-ink group-hover:underline">
-                    {g.title}
-                  </div>
+                <div className="text-sm font-medium leading-snug text-ink group-hover:underline">
+                  {g.title}
                 </div>
               </Link>
             </li>
           ))}
         </ul>
-      </section>
-
-      {/* Browse topics */}
-      <section className="rounded-2xl border border-line bg-paper-raised p-6">
-        <h3 className="text-[11px] uppercase tracking-[0.2em] text-ink-faint">
-          Browse topics
-        </h3>
-        <div className="mt-4 flex flex-wrap gap-2">
-          {CATEGORY_META.map((c) => (
-            <Link
-              key={c.name}
-              href={`/category/${c.name.toLowerCase()}`}
-              className="inline-flex items-center gap-1.5 rounded-full border border-line px-3 py-1.5 text-sm text-ink-soft transition-colors hover:border-accent hover:text-accent"
-            >
-              <span aria-hidden>{c.icon}</span>
-              {c.name}
-            </Link>
-          ))}
-        </div>
       </section>
 
       {/* Newsletter mini */}

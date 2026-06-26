@@ -2,21 +2,20 @@ import Navbar from "@/app/components/Navbar";
 import Hero from "@/app/components/Hero";
 import GuideShowcase from "@/app/components/GuideShowcase";
 import Footer from "@/app/components/Footer";
-import LatestFromBlog from "@/app/components/LatestFromBlog";
-import { getAllGuides } from "@/app/lib/guides";
+import { getAllCards } from "@/app/lib/content";
 
 export const revalidate = 300;
 
-export default function Home() {
-  const guides = getAllGuides();
+export default async function Home() {
+  // Guides + published Signalor posts, newest first — the latest post leads.
+  const items = await getAllCards();
 
   return (
     <>
       <Navbar />
       <main className="flex-1">
-        <LatestFromBlog />
         <Hero />
-        <GuideShowcase guides={guides} />
+        <GuideShowcase items={items} />
       </main>
       <Footer />
     </>

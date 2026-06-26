@@ -1,48 +1,58 @@
 import Link from "next/link";
-import type { Guide } from "@/app/lib/guides";
-import { formatDate } from "@/app/lib/guides";
+import type { CardItem } from "@/app/lib/content";
+import { formatCardDate } from "@/app/lib/content";
 import CoverArt from "./CoverArt";
 
-export default function GuideCard({ guide }: { guide: Guide }) {
+/** A homepage card — renders either a local step guide or a published Signalor post. */
+export default function GuideCard({ item }: { item: CardItem }) {
+  const isGuide = item.source === "guide";
+
   return (
     <article className="group flex flex-col">
-      <Link
-        href={`/blog/${guide.slug}`}
-        className="flex flex-1 flex-col focus:outline-none"
-      >
+      <Link href={`/${item.slug}`} className="flex flex-1 flex-col focus:outline-none">
         <div className="relative aspect-[4/3] w-full overflow-hidden rounded-xl border border-line">
-          <CoverArt
-            slug={guide.slug}
-            category={guide.category}
-            className="h-full w-full transition-transform duration-500 ease-out group-hover:scale-105"
-          />
-          <span className="absolute left-3 top-3 rounded-full bg-paper/90 px-3 py-1 text-[11px] font-medium uppercase tracking-wide text-ink backdrop-blur">
-            {guide.category}
-          </span>
+          {item.imageUrl ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={item.imageUrl}
+              alt={item.title}
+              className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+            />
+          ) : (
+            <CoverArt
+              slug={item.slug}
+              category={item.category}
+              className="h-full w-full transition-transform duration-500 ease-out group-hover:scale-105"
+            />
+          )}
         </div>
 
         <div className="mt-4 flex items-center gap-2 text-xs text-ink-faint">
           <span className="rounded-full bg-accent-soft px-2.5 py-0.5 font-medium text-accent">
-            {guide.difficulty}
+            {isGuide ? item.difficulty : "New"}
           </span>
-          <span aria-hidden>·</span>
-          <time dateTime={guide.date}>{formatDate(guide.date)}</time>
+          {item.date ? (
+            <>
+              <span aria-hidden>·</span>
+              <time dateTime={item.date}>{formatCardDate(item.date)}</time>
+            </>
+          ) : null}
         </div>
 
         <h3 className="font-display mt-2.5 text-xl font-semibold leading-snug tracking-tight text-ink decoration-from-font underline-offset-4 group-hover:underline sm:text-2xl">
-          {guide.title}
+          {item.title}
         </h3>
 
         <p className="mt-2.5 flex-1 text-sm leading-relaxed text-ink-soft">
-          {guide.excerpt}
+          {item.excerpt}
         </p>
 
         <div className="mt-5 flex items-center justify-between border-t border-line pt-4">
           <span className="text-[11px] font-medium uppercase tracking-[0.18em] text-ink group-hover:text-accent">
-            Read the steps →
+            {isGuide ? "Read the steps →" : "Read more →"}
           </span>
           <span className="text-xs text-ink-faint">
-            {guide.steps.length} steps · {guide.readingTime} min
+            {isGuide ? `${item.steps} steps · ${item.readingTime} min` : `${item.readingTime} min read`}
           </span>
         </div>
       </Link>

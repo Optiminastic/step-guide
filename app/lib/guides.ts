@@ -1,6 +1,6 @@
 // Data layer for Stepwise — the step-by-step how-to guide journal.
-// Single source of truth for guides + categories. Presentation components
-// depend on these types, never the other way around (design-for-change).
+// Single source of truth for guides. Presentation components depend on these
+// types, never the other way around (design-for-change).
 
 export type Category =
   | "Technology"
@@ -43,95 +43,28 @@ export interface Guide {
   tips: string[];
 }
 
-export interface CategoryMeta {
+// Categories are no longer surfaced as navigation/filters in the UI, but each
+// guide keeps an internal category so the generative cover art stays themed.
+interface CategoryMeta {
   name: Category;
-  /** Emoji used in topic pills + cover art. */
+  /** Emoji floated on the cover art. */
   icon: string;
-  blurb: string;
 }
 
-export const CATEGORY_META: CategoryMeta[] = [
-  { name: "Technology", icon: "💻", blurb: "Build, code and ship." },
-  { name: "Cooking", icon: "🍳", blurb: "Recipes, step by step." },
-  { name: "Creator", icon: "🎬", blurb: "Grow an audience." },
-  { name: "Career", icon: "📈", blurb: "Land it and level up." },
-  { name: "Money", icon: "💰", blurb: "Spend, save, invest." },
-  { name: "Lifestyle", icon: "🌿", blurb: "Habits that stick." },
+const CATEGORY_META: CategoryMeta[] = [
+  { name: "Technology", icon: "💻" },
+  { name: "Cooking", icon: "🍳" },
+  { name: "Creator", icon: "🎬" },
+  { name: "Career", icon: "📈" },
+  { name: "Money", icon: "💰" },
+  { name: "Lifestyle", icon: "🌿" },
 ];
-
-export const CATEGORIES: Category[] = CATEGORY_META.map((c) => c.name);
 
 export function categoryIcon(category: Category): string {
   return CATEGORY_META.find((c) => c.name === category)?.icon ?? "📌";
 }
 
 const GUIDES: Guide[] = [
-  {
-    slug: "how-to-start-a-youtube-channel",
-    title: "How to Start a YouTube Channel",
-    excerpt:
-      "From a blank account to your first published video — a no-fluff path to launching a channel people actually subscribe to.",
-    category: "Creator",
-    date: "2026-06-18",
-    difficulty: "Beginner",
-    duration: "A weekend to launch",
-    readingTime: 9,
-    author: "Maya Brooks",
-    authorRole: "Creator Coach",
-    intro: [
-      "Almost everyone who wants to start a YouTube channel waits months for the 'right' camera, the perfect idea, or a sudden burst of confidence. None of that is what gets a channel off the ground — published videos do.",
-      "This guide takes you from an empty account to your first upload, with the setup decisions that actually move the needle and the perfectionism traps you can safely ignore.",
-    ],
-    requirementsLabel: "What you'll need",
-    requirements: [
-      "A Google account",
-      "A smartphone with a decent camera (no DSLR required)",
-      "Free editing software (CapCut, DaVinci Resolve, or your phone's editor)",
-      "A quiet room and a window for natural light",
-    ],
-    steps: [
-      {
-        title: "Pick a niche you can sustain for 50 videos",
-        detail:
-          "Choose a topic narrow enough to stand out but broad enough that you won't run out of ideas. If you can't imagine 50 video titles, the niche is too thin.",
-      },
-      {
-        title: "Create and brand the channel",
-        detail:
-          "Set up the channel in YouTube Studio, add a clear profile picture, a banner that states what the channel is about, and a one-line description with your upload schedule.",
-      },
-      {
-        title: "Script your first video around one clear promise",
-        detail:
-          "Open with the outcome the viewer gets, deliver it in the middle, and close with a single call to action. A tight script beats expensive gear every time.",
-      },
-      {
-        title: "Film in short takes with good light",
-        detail:
-          "Face a window, prop your phone at eye level, and record in 10–20 second chunks. Short takes are far easier to edit and re-record than one long monologue.",
-      },
-      {
-        title: "Edit for pace, not polish",
-        detail:
-          "Cut every pause and 'um', add captions, and keep the energy moving. Viewers forgive rough edges; they don't forgive being bored.",
-      },
-      {
-        title: "Design a thumbnail and title that pair",
-        detail:
-          "The thumbnail and title should tell one story together, not repeat each other. Aim for curiosity plus a clear benefit — and keep thumbnail text under four words.",
-      },
-      {
-        title: "Publish, then study your retention graph",
-        detail:
-          "Upload, share it once, and resist refreshing the view count. After 48 hours, open the retention graph to see exactly where people dropped off — that's your roadmap for video two.",
-      },
-    ],
-    tips: [
-      "Batch-film three videos at once so a single bad day doesn't break your schedule.",
-      "Your first 10 videos are practice. Treat them as reps, not referendums on your worth.",
-      "Reply to every early comment — engaged viewers train the algorithm faster than views do.",
-    ],
-  },
   {
     slug: "how-to-use-claude-code-as-a-software-developer",
     title: "How to Use Claude Code as a Software Developer",
@@ -196,6 +129,72 @@ const GUIDES: Guide[] = [
       "Keep a scratch branch — let the agent experiment freely where mistakes are cheap.",
       "If it heads the wrong way, stop and re-prompt rather than letting it dig deeper.",
       "The clearer your request, the better the output. Vague prompts get vague code.",
+    ],
+  },
+  {
+    slug: "how-to-start-a-youtube-channel",
+    title: "How to Start a YouTube Channel",
+    excerpt:
+      "From a blank account to your first published video — a no-fluff path to launching a channel people actually subscribe to.",
+    category: "Creator",
+    date: "2026-06-18",
+    difficulty: "Beginner",
+    duration: "A weekend to launch",
+    readingTime: 9,
+    author: "Maya Brooks",
+    authorRole: "Creator Coach",
+    intro: [
+      "Almost everyone who wants to start a YouTube channel waits months for the 'right' camera, the perfect idea, or a sudden burst of confidence. None of that is what gets a channel off the ground — published videos do.",
+      "This guide takes you from an empty account to your first upload, with the setup decisions that actually move the needle and the perfectionism traps you can safely ignore.",
+    ],
+    requirementsLabel: "What you'll need",
+    requirements: [
+      "A Google account",
+      "A smartphone with a decent camera (no DSLR required)",
+      "Free editing software (CapCut, DaVinci Resolve, or your phone's editor)",
+      "A quiet room and a window for natural light",
+    ],
+    steps: [
+      {
+        title: "Pick a niche you can sustain for 50 videos",
+        detail:
+          "Choose a topic narrow enough to stand out but broad enough that you won't run out of ideas. If you can't imagine 50 video titles, the niche is too thin.",
+      },
+      {
+        title: "Create and brand the channel",
+        detail:
+          "Set up the channel in YouTube Studio, add a clear profile picture, a banner that states what the channel is about, and a one-line description with your upload schedule.",
+      },
+      {
+        title: "Script your first video around one clear promise",
+        detail:
+          "Open with the outcome the viewer gets, deliver it in the middle, and close with a single call to action. A tight script beats expensive gear every time.",
+      },
+      {
+        title: "Film in short takes with good light",
+        detail:
+          "Face a window, prop your phone at eye level, and record in 10–20 second chunks. Short takes are far easier to edit and re-record than one long monologue.",
+      },
+      {
+        title: "Edit for pace, not polish",
+        detail:
+          "Cut every pause and 'um', add captions, and keep the energy moving. Viewers forgive rough edges; they don't forgive being bored.",
+      },
+      {
+        title: "Design a thumbnail and title that pair",
+        detail:
+          "The thumbnail and title should tell one story together, not repeat each other. Aim for curiosity plus a clear benefit — and keep thumbnail text under four words.",
+      },
+      {
+        title: "Publish, then study your retention graph",
+        detail:
+          "Upload, share it once, and resist refreshing the view count. After 48 hours, open the retention graph to see exactly where people dropped off — that's your roadmap for video two.",
+      },
+    ],
+    tips: [
+      "Batch-film three videos at once so a single bad day doesn't break your schedule.",
+      "Your first 10 videos are practice. Treat them as reps, not referendums on your worth.",
+      "Reply to every early comment — engaged viewers train the algorithm faster than views do.",
     ],
   },
   {
@@ -330,133 +329,6 @@ const GUIDES: Guide[] = [
       "Ship the ugly version today; you can only improve something that exists.",
       "Copy a layout you admire as a starting structure — then make it yours.",
       "Keep one backup of your files outside your laptop. Future-you will be grateful.",
-    ],
-  },
-  {
-    slug: "how-to-brew-the-perfect-pour-over-coffee",
-    title: "How to Brew the Perfect Pour-Over Coffee",
-    excerpt:
-      "Café-quality coffee from a $20 dripper — the ratio, the grind, and the pour technique that fixes a bitter or sour cup.",
-    category: "Cooking",
-    date: "2026-06-09",
-    difficulty: "Beginner",
-    duration: "About 5 minutes",
-    readingTime: 6,
-    author: "Anjali Mehta",
-    authorRole: "Home Cook",
-    intro: [
-      "Pour-over looks fussy, but it's really just hot water meeting coffee at the right pace. Nail three variables — ratio, grind, and pour — and you'll make a cleaner, sweeter cup than most cafés.",
-      "Here's the repeatable method, plus how to diagnose a cup that comes out bitter or sour.",
-    ],
-    requirementsLabel: "What you'll need",
-    requirements: [
-      "A pour-over dripper and paper filter",
-      "Fresh whole-bean coffee (20g) and a grinder",
-      "A kitchen scale and a kettle",
-      "A timer (your phone is fine)",
-    ],
-    steps: [
-      {
-        title: "Weigh your coffee and water",
-        detail:
-          "Start with 20g of coffee to 320g of water — a 1:16 ratio. Weighing, not eyeballing, is what makes the result repeatable.",
-      },
-      {
-        title: "Heat water to just off the boil",
-        detail:
-          "Aim for about 94°C. If you don't have a thermometer, boil and wait 30 seconds. Too-hot water scorches the grounds bitter.",
-      },
-      {
-        title: "Grind to medium-coarse",
-        detail:
-          "The grounds should feel like coarse sand. Too fine and the cup turns bitter and slow; too coarse and it runs sour and weak.",
-      },
-      {
-        title: "Rinse the filter and bloom",
-        detail:
-          "Wet the paper filter to remove papery taste, then pour just enough water to soak the grounds and wait 30 seconds. The 'bloom' lets trapped gas escape.",
-      },
-      {
-        title: "Pour in slow, steady circles",
-        detail:
-          "Add the rest of the water in two or three pours, spiraling from center to edge. Keep the bed flat and the water level steady.",
-      },
-      {
-        title: "Finish by 3 minutes and taste",
-        detail:
-          "The whole brew should drain in about three minutes. Bitter? Grind coarser or cool the water. Sour? Grind finer or pour a touch slower.",
-      },
-    ],
-    tips: [
-      "Buy whole beans and grind right before brewing — it's the single biggest upgrade.",
-      "Keep your ratio fixed and change only one variable at a time when dialing in.",
-      "Give the dripper a gentle swirl after the final pour for an even extraction.",
-    ],
-  },
-  {
-    slug: "how-to-grow-on-instagram-from-zero",
-    title: "How to Grow on Instagram From Zero",
-    excerpt:
-      "A realistic playbook for going from no followers to a real, engaged audience — content pillars, posting cadence, and the reels formula.",
-    category: "Creator",
-    date: "2026-06-06",
-    difficulty: "Intermediate",
-    duration: "Ongoing — first results in weeks",
-    readingTime: 9,
-    author: "Maya Brooks",
-    authorRole: "Creator Coach",
-    intro: [
-      "Growing on Instagram isn't about gaming an algorithm — it's about making content worth sharing, consistently, for an audience you've clearly defined. The accounts that stall are the ones posting randomly for everyone.",
-      "This playbook gives you the structure: who you're for, what you make, and how often.",
-    ],
-    requirementsLabel: "Before you start",
-    requirements: [
-      "An Instagram account switched to a free Professional account",
-      "A phone that shoots decent video",
-      "A simple editing app (Instagram's own, or CapCut)",
-      "30–45 focused minutes a day",
-    ],
-    steps: [
-      {
-        title: "Define one person you're posting for",
-        detail:
-          "Write a one-line description of your ideal follower. Content aimed at a specific person travels further than content aimed at everyone.",
-      },
-      {
-        title: "Choose three content pillars",
-        detail:
-          "Pick three recurring themes you can post about indefinitely. Pillars stop you from staring at a blank screen and keep your feed coherent.",
-      },
-      {
-        title: "Optimize your profile for the click",
-        detail:
-          "Your bio should say who you help and how in one line. A clear profile converts curious visitors into followers.",
-      },
-      {
-        title: "Make reels with a strong first second",
-        detail:
-          "Open with motion or a bold claim, deliver one idea, and keep it under 20 seconds. The first second decides whether anyone sees the rest.",
-      },
-      {
-        title: "Post consistently, not constantly",
-        detail:
-          "Four good posts a week beats fourteen rushed ones. Pick a cadence you can keep for three months without burning out.",
-      },
-      {
-        title: "Reply and engage in the first hour",
-        detail:
-          "Answer every comment quickly and engage with similar accounts. Early engagement signals the post is worth showing to more people.",
-      },
-      {
-        title: "Review insights and double down",
-        detail:
-          "Each week, find your top post and make more like it. Let the data, not your ego, decide what you create next.",
-      },
-    ],
-    tips: [
-      "Hooks are 80% of a reel — spend more time on the first line than the rest.",
-      "Repurpose one idea into a reel, a carousel, and a story instead of inventing three.",
-      "Followers are a vanity metric; saves and shares predict real growth.",
     ],
   },
   {
@@ -658,204 +530,6 @@ const GUIDES: Guide[] = [
       "Design your evening to make your morning easy. They're the same habit.",
     ],
   },
-  {
-    slug: "how-to-make-no-knead-sourdough-bread",
-    title: "How to Make No-Knead Sourdough Bread",
-    excerpt:
-      "A crackly crust and an open crumb without kneading or special equipment — the patient, beginner-friendly path to real sourdough.",
-    category: "Cooking",
-    date: "2026-05-24",
-    difficulty: "Intermediate",
-    duration: "About 24 hours, mostly waiting",
-    readingTime: 12,
-    author: "Anjali Mehta",
-    authorRole: "Home Cook",
-    intro: [
-      "Sourdough has a reputation for being temperamental, but most of the work is done by time, not by you. With an active starter and a Dutch oven, a beginner can pull a bakery-worthy loaf out of a home oven.",
-      "This no-knead method trades effort for patience — the dough strengthens itself through long folds and a slow rise.",
-    ],
-    requirementsLabel: "Ingredients & tools",
-    requirements: [
-      "100g active, bubbly sourdough starter",
-      "500g bread flour and 350g water",
-      "10g salt",
-      "A Dutch oven and a banneton or bowl with a cloth",
-    ],
-    steps: [
-      {
-        title: "Feed your starter the night before",
-        detail:
-          "Your starter should double within a few hours and float in water when ready. A sluggish starter makes a flat loaf.",
-      },
-      {
-        title: "Mix and autolyse",
-        detail:
-          "Combine flour and water and rest for an hour before adding starter and salt. This 'autolyse' hydrates the flour and kick-starts gluten with zero effort.",
-      },
-      {
-        title: "Do four sets of stretch-and-folds",
-        detail:
-          "Every 30 minutes for two hours, wet your hand, stretch the dough up and fold it over. This replaces kneading and builds the structure.",
-      },
-      {
-        title: "Bulk ferment until puffy",
-        detail:
-          "Let the dough rise at room temperature until it's jiggly and grown by about 50%. Time depends on warmth, so watch the dough, not the clock.",
-      },
-      {
-        title: "Shape and cold-proof overnight",
-        detail:
-          "Shape into a taut ball, place seam-up in a floured banneton, and refrigerate overnight. The cold rest deepens flavor and makes scoring easier.",
-      },
-      {
-        title: "Score and bake in a screaming-hot Dutch oven",
-        detail:
-          "Preheat the Dutch oven to 250°C, slash the top with a sharp blade, and bake covered for 20 minutes, then uncovered for 20–25 more.",
-      },
-      {
-        title: "Cool completely before slicing",
-        detail:
-          "Wait at least an hour. Cutting hot bread gums the crumb — the loaf is still cooking as it cools.",
-      },
-    ],
-    tips: [
-      "Weigh everything; baker's percentages don't survive guesswork.",
-      "A warmer kitchen ferments faster — adjust your timing in summer and winter.",
-      "Save your starter discard for pancakes instead of throwing it away.",
-    ],
-  },
-  {
-    slug: "how-to-learn-a-new-language-fast",
-    title: "How to Learn a New Language (Fast)",
-    excerpt:
-      "Skip the textbook grind. Build a habit around speaking, high-frequency words, and real input from day one.",
-    category: "Lifestyle",
-    date: "2026-05-20",
-    difficulty: "Intermediate",
-    duration: "Daily habit — results in months",
-    readingTime: 10,
-    author: "Sofia Lang",
-    authorRole: "Habits & Productivity",
-    intro: [
-      "You won't learn a language by memorizing grammar tables — you'll learn it by understanding and producing real sentences, over and over. The fast track isn't a secret app; it's a daily habit pointed at the right things.",
-      "This guide focuses your effort on what actually moves you toward conversation.",
-    ],
-    requirementsLabel: "What you'll need",
-    requirements: [
-      "A target language and an honest 'why'",
-      "20–30 minutes a day, daily",
-      "A spaced-repetition app (like Anki)",
-      "Access to native content — podcasts, shows, YouTube",
-    ],
-    steps: [
-      {
-        title: "Pick a concrete reason and goal",
-        detail:
-          "'Order food and chat on my trip in six months' beats 'become fluent'. A specific goal tells you what to study and when you've arrived.",
-      },
-      {
-        title: "Learn the 1,000 most frequent words first",
-        detail:
-          "A small set of words covers most everyday speech. Front-loading high-frequency vocabulary buys the fastest comprehension per hour.",
-      },
-      {
-        title: "Use spaced repetition daily",
-        detail:
-          "Review flashcards every day so words resurface just before you'd forget them. Ten minutes daily beats an hour once a week.",
-      },
-      {
-        title: "Get comprehensible input early",
-        detail:
-          "Watch and listen to content just above your level. Understanding real language in context teaches grammar painlessly.",
-      },
-      {
-        title: "Speak from week one",
-        detail:
-          "Talk to yourself, a tutor, or a language partner immediately. Output reveals exactly which words you're missing.",
-      },
-      {
-        title: "Learn grammar to explain what you already hear",
-        detail:
-          "Use grammar to make sense of patterns you've encountered, not as a wall to climb before speaking. Just-in-time beats just-in-case.",
-      },
-      {
-        title: "Track a daily streak",
-        detail:
-          "Consistency compounds. A short session every day will out-perform marathon weekends within a couple of months.",
-      },
-    ],
-    tips: [
-      "Change your phone's language once you know the basics for free daily reps.",
-      "Mistakes are data, not failure — fluent speakers simply made more of them.",
-      "Find content you genuinely enjoy; motivation is the real limiting factor.",
-    ],
-  },
-  {
-    slug: "how-to-negotiate-a-salary-raise",
-    title: "How to Negotiate a Salary Raise",
-    excerpt:
-      "Build the case, set the number, and have the conversation with confidence — a calm, evidence-based approach to getting paid more.",
-    category: "Career",
-    date: "2026-05-16",
-    difficulty: "Intermediate",
-    duration: "Prep over 1–2 weeks",
-    readingTime: 9,
-    author: "Sofia Lang",
-    authorRole: "Career Strategist",
-    intro: [
-      "Asking for a raise feels uncomfortable because most people walk in with a feeling instead of a case. Managers don't respond to 'I'd like more money' — they respond to evidence, market data, and a clear number.",
-      "This guide turns a nerve-wracking ask into a calm, prepared conversation.",
-    ],
-    requirementsLabel: "Before the conversation",
-    requirements: [
-      "A record of your achievements and their impact",
-      "Salary benchmarks for your role and region",
-      "A specific target number and a walk-away minimum",
-      "A good moment — after a win, near review season",
-    ],
-    steps: [
-      {
-        title: "Document your wins with numbers",
-        detail:
-          "List what you delivered and the impact it had on revenue, cost, or time. A raise is paid for results, so make the results undeniable.",
-      },
-      {
-        title: "Research the market rate",
-        detail:
-          "Use salary sites and peers to learn the real range for your role. Data depersonalizes the ask and anchors it in reality.",
-      },
-      {
-        title: "Decide your number and your floor",
-        detail:
-          "Pick a specific target slightly above what you'd accept, plus the minimum you'll settle for. Round numbers feel arbitrary; precise ones feel researched.",
-      },
-      {
-        title: "Time the conversation well",
-        detail:
-          "Raise it after a clear win or during the review cycle when budgets are set. Timing can matter as much as the argument.",
-      },
-      {
-        title: "Open with value, then state the number",
-        detail:
-          "Briefly recap your impact, then say the number plainly and stop talking. Silence after the ask is your most powerful tool.",
-      },
-      {
-        title: "Handle the response without flinching",
-        detail:
-          "If it's yes, get it in writing. If it's no, ask what specific outcomes would justify it and set a date to revisit.",
-      },
-      {
-        title: "Get any agreement in writing",
-        detail:
-          "Verbal promises evaporate at budget time. A short follow-up email confirming the terms protects you.",
-      },
-    ],
-    tips: [
-      "Negotiate the whole package — bonus, equity, and flexibility all have value.",
-      "Practice the ask out loud until the number rolls off without a wobble.",
-      "A 'no' now is often a 'not yet' — leave the door open and a plan in place.",
-    ],
-  },
 ];
 
 /** Guides sorted newest-first. */
@@ -869,10 +543,6 @@ export function getGuideBySlug(slug: string): Guide | undefined {
 
 export function getAllSlugs(): string[] {
   return GUIDES.map((g) => g.slug);
-}
-
-export function getGuidesByCategory(category: Category): Guide[] {
-  return getAllGuides().filter((g) => g.category === category);
 }
 
 /** A small, hand-picked set for the "Featured guides" sidebar. */

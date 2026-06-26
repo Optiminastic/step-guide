@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { CATEGORY_META } from "@/app/lib/guides";
 
 const SECTIONS = [
   {
@@ -49,7 +48,7 @@ export default function Footer() {
         </div>
       </div>
 
-      <div className="mx-auto grid max-w-7xl grid-cols-2 gap-8 px-5 py-14 sm:px-8 md:grid-cols-4">
+      <div className="mx-auto grid max-w-7xl grid-cols-2 gap-8 px-5 py-14 sm:px-8 md:grid-cols-3">
         <div className="col-span-2 md:col-span-1">
           <Link href="/" className="flex items-baseline gap-2">
             <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-ink text-sm text-paper">
@@ -63,24 +62,6 @@ export default function Footer() {
             Clear, beginner-friendly step-by-step guides that help you make,
             build and do anything.
           </p>
-        </div>
-
-        <div>
-          <h3 className="text-[11px] uppercase tracking-[0.2em] text-ink-faint">
-            Categories
-          </h3>
-          <ul className="mt-4 space-y-2.5">
-            {CATEGORY_META.map((c) => (
-              <li key={c.name}>
-                <Link
-                  href={`/category/${c.name.toLowerCase()}`}
-                  className="text-sm text-ink-soft transition-colors hover:text-ink"
-                >
-                  {c.name}
-                </Link>
-              </li>
-            ))}
-          </ul>
         </div>
 
         {SECTIONS.map((section) => (
