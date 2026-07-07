@@ -48,12 +48,15 @@ function matchCategory(raw: string): Category {
   return CATEGORY_LIST.find((c) => c.toLowerCase() === raw.trim().toLowerCase()) ?? "Technology";
 }
 
-/** Keep only genuine published Signalor rows — never placeholder/test rows. */
+/** Keep only genuine published Signalor rows — never placeholder/test rows.
+ *  The list endpoint returns summaries WITHOUT content_html, so only gate on
+ *  body length when a body is actually present (never drop a valid summary). */
 function isRealDbPost(r: BlogRow): boolean {
   const title = (r.title ?? "").trim();
-  const text = stripHtml(r.content_html ?? "");
   if (!title || /^test\b/i.test(title)) return false;
-  return text.length >= 140;
+  const text = stripHtml(r.content_html ?? "");
+  if (text && text.length < 140) return false;
+  return true;
 }
 
 function guideToCard(g: Guide): CardItem {
