@@ -10,7 +10,7 @@ export default function Sidebar() {
       {/* About */}
       <section className="rounded-2xl border border-line bg-paper-raised p-6">
         <h3 className="text-[11px] uppercase tracking-[0.2em] text-ink-faint">
-          About Stepwise
+          About Guide Factories
         </h3>
         <div className="mt-4 flex items-center gap-3">
           <span className="flex h-12 w-12 items-center justify-center rounded-full bg-accent text-lg text-paper">
@@ -18,7 +18,7 @@ export default function Sidebar() {
           </span>
           <div>
             <div className="font-display text-base font-semibold text-ink">
-              The Stepwise Team
+              The Guide Factories Team
             </div>
             <div className="text-xs text-ink-faint">Makers &amp; explainers</div>
           </div>

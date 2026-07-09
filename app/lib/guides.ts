@@ -1,4 +1,4 @@
-// Data layer for Stepwise — the step-by-step how-to guide journal.
+// Data layer for Guide Factories — the step-by-step how-to guide journal.
 // Single source of truth for guides. Presentation components depend on these
 // types, never the other way around (design-for-change).
 

@@ -15,7 +15,7 @@ export default function GuideCard({ item }: { item: CardItem }) {
             // eslint-disable-next-line @next/next/no-img-element
             <img
               src={item.imageUrl}
-              alt={item.title}
+              alt={`Cover image for ${item.title}`}
               className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
             />
           ) : (

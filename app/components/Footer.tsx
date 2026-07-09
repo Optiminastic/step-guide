@@ -6,7 +6,7 @@ const SECTIONS = [
     links: ["All guides", "Most popular", "Newest", "Beginner-friendly"],
   },
   {
-    title: "Stepwise",
+    title: "Guide Factories",
     links: ["About", "Write for us", "Editorial standards", "Contact"],
   },
 ];
@@ -55,7 +55,7 @@ export default function Footer() {
               ✶
             </span>
             <span className="font-display text-xl font-semibold tracking-tight text-ink">
-              Stepwise
+              Guide Factories
             </span>
           </Link>
           <p className="mt-3 max-w-xs text-sm leading-relaxed text-ink-soft">
@@ -87,7 +87,7 @@ export default function Footer() {
 
       <div className="border-t border-line">
         <div className="mx-auto flex max-w-7xl flex-col gap-2 px-5 py-6 text-xs text-ink-faint sm:flex-row sm:items-center sm:justify-between sm:px-8">
-          <span>© 2026 Stepwise. All rights reserved.</span>
+          <span>© 2026 Guide Factories. All rights reserved.</span>
           <span>Set in Fraunces &amp; Inter.</span>
         </div>
       </div>

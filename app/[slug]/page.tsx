@@ -4,12 +4,22 @@ import { notFound } from "next/navigation";
 import Navbar from "@/app/components/Navbar";
 import Footer from "@/app/components/Footer";
 import CoverArt from "@/app/components/CoverArt";
+import JsonLd from "@/app/components/JsonLd";
 import { getAllGuides, getGuideBySlug, formatDate } from "@/app/lib/guides";
 import {
   getPosts,
   getPostBySlug,
   formatDate as formatDbDate,
 } from "@/app/lib/blog-db";
+import {
+  SITE_URL,
+  SITE_NAME,
+  OG_IMAGE,
+  stripHtml,
+  truncate,
+  howToSchema,
+  blogPostingSchema,
+} from "@/app/lib/seo";
 
 export const revalidate = 300;
 
@@ -25,11 +35,65 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
+
   const guide = getGuideBySlug(slug);
-  if (guide) return { title: `${guide.title} — Stepwise`, description: guide.excerpt };
+  if (guide) {
+    const url = `${SITE_URL}/${guide.slug}`;
+    const description = truncate(guide.excerpt);
+    return {
+      title: guide.title,
+      description,
+      authors: [{ name: guide.author }],
+      alternates: { canonical: `/${guide.slug}` },
+      openGraph: {
+        type: "article",
+        url,
+        siteName: SITE_NAME,
+        title: guide.title,
+        description,
+        publishedTime: guide.date,
+        authors: [guide.author],
+        images: [
+          { url: OG_IMAGE.url, width: OG_IMAGE.width, height: OG_IMAGE.height, alt: guide.title },
+        ],
+      },
+      twitter: {
+        card: "summary_large_image",
+        title: guide.title,
+        description,
+        images: [OG_IMAGE.url],
+      },
+    };
+  }
+
   const post = await getPostBySlug(slug);
-  if (post) return { title: post.title, description: post.description };
-  return { title: "Not found" };
+  if (post) {
+    const url = `${SITE_URL}/${post.slug}`;
+    const description = truncate(post.description?.trim() || stripHtml(post.content_html));
+    const image = post.image_url?.trim() || OG_IMAGE.url;
+    return {
+      title: post.title,
+      description,
+      alternates: { canonical: `/${post.slug}` },
+      openGraph: {
+        type: "article",
+        url,
+        siteName: SITE_NAME,
+        title: post.title,
+        description,
+        publishedTime: post.published_at ?? undefined,
+        images: [{ url: image, width: 1200, height: 630, alt: post.title }],
+      },
+      twitter: {
+        card: "summary_large_image",
+        title: post.title,
+        description,
+        images: [image],
+      },
+    };
+  }
+
+  return { title: "Not found", robots: { index: false } };
 }
 
 export default async function PostPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -40,6 +104,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
   if (guide) {
     return (
       <>
+        <JsonLd data={howToSchema(guide)} />
         <Navbar />
         <main className="flex-1">
           <article className="mx-auto max-w-3xl px-5 pb-20 pt-12 sm:px-8 sm:pt-16">
@@ -107,7 +172,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
               </h2>
               <ol className="mt-6 space-y-8">
                 {guide.steps.map((step, i) => (
-                  <li key={i} className="flex gap-5">
+                  <li key={i} id={`step-${i + 1}`} className="flex gap-5">
                     <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-ink font-display text-lg font-semibold text-paper">
                       {i + 1}
                     </span>
@@ -147,6 +212,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
 
   return (
     <>
+      <JsonLd data={blogPostingSchema(post)} />
       <Navbar />
       <main className="flex-1">
         <article className="mx-auto max-w-3xl px-5 pb-20 pt-12 sm:px-8 sm:pt-16">
@@ -167,7 +233,11 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
           {post.image_url ? (
             <div className="mt-10 overflow-hidden rounded-xl border border-line">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={post.image_url} alt={post.title} className="w-full object-cover" />
+              <img
+                src={post.image_url}
+                alt={`Cover image for ${post.title}`}
+                className="w-full object-cover"
+              />
             </div>
           ) : null}
           <div

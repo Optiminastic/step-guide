@@ -1,4 +1,4 @@
-// Unified card list for the Stepwise homepage grid.
+// Unified card list for the Guide Factories homepage grid.
 //
 // Merges the locally-authored step guides with any published Signalor (DB)
 // posts for this site into one list, newest-first — so a freshly published
