@@ -19,6 +19,7 @@ import {
   truncate,
   howToSchema,
   blogPostingSchema,
+  faqPageSchema,
 } from "@/app/lib/seo";
 
 export const revalidate = 300;
@@ -210,9 +211,17 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
   const post = await getPostBySlug(slug);
   if (!post) notFound();
 
+  // Demote any <h1> in the DB content to <h2> so the page title stays the
+  // page's only <h1>.
+  const contentHtml = post.content_html.replace(
+    /<(\/?)h1(\s|>|\/)/gi,
+    "<$1h2$2",
+  );
+
   return (
     <>
       <JsonLd data={blogPostingSchema(post)} />
+      {post.faq.length > 0 ? <JsonLd data={faqPageSchema(post.faq)} /> : null}
       <Navbar />
       <main className="flex-1">
         <article className="mx-auto max-w-3xl px-5 pb-20 pt-12 sm:px-8 sm:pt-16">
@@ -242,8 +251,30 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
           ) : null}
           <div
             className="mt-10 [&_a]:text-accent [&_a]:underline [&_h2]:font-display [&_h2]:mt-8 [&_h2]:text-2xl [&_h2]:font-semibold [&_h2]:text-ink [&_h3]:mt-6 [&_h3]:text-xl [&_h3]:font-semibold [&_h3]:text-ink [&_li]:ml-5 [&_li]:list-disc [&_li]:text-ink-soft [&_p]:mt-4 [&_p]:text-lg [&_p]:leading-relaxed [&_p]:text-ink-soft [&_ul]:mt-4"
-            dangerouslySetInnerHTML={{ __html: post.content_html }}
+            dangerouslySetInnerHTML={{ __html: contentHtml }}
           />
+          {post.faq.length > 0 ? (
+            <section className="mt-14 border-t border-line pt-10">
+              <h2 className="font-display text-2xl font-semibold tracking-tight text-ink">
+                Frequently Asked Questions
+              </h2>
+              <dl className="mt-6 space-y-6">
+                {post.faq.map((item, i) => (
+                  <div
+                    key={i}
+                    className="rounded-2xl border border-line bg-paper-raised p-6"
+                  >
+                    <dt className="font-display text-lg font-semibold text-ink">
+                      {item.question}
+                    </dt>
+                    <dd className="mt-2 text-lg leading-relaxed text-ink-soft">
+                      {item.answer}
+                    </dd>
+                  </div>
+                ))}
+              </dl>
+            </section>
+          ) : null}
         </article>
       </main>
       <Footer />

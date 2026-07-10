@@ -15,6 +15,20 @@ export interface BlogRow {
   category: string;
   brand_url: string;
   published_at: string | null;
+  faq: { question: string; answer: string }[];
+}
+
+function normalizeFaq(raw: unknown): { question: string; answer: string }[] {
+  if (!Array.isArray(raw)) return [];
+  return raw
+    .map((item) => {
+      const obj = (item ?? {}) as Record<string, unknown>;
+      return {
+        question: String(obj.question ?? "").trim(),
+        answer: String(obj.answer ?? "").trim(),
+      };
+    })
+    .filter((f) => f.question && f.answer);
 }
 
 function normalize(raw: Record<string, unknown>): BlogRow {
@@ -28,6 +42,7 @@ function normalize(raw: Record<string, unknown>): BlogRow {
     category: String(raw.category ?? FOLDER),
     brand_url: String(raw.brand_url ?? ""),
     published_at: (raw.published_at as string) ?? null,
+    faq: normalizeFaq(raw.faq),
   };
 }
 
